@@ -81,7 +81,7 @@ COMPREHENSIVE_SKILLS = {
         'Clojure', 'F#', 'VB.NET', 'Objective-C', 'Dart', 'Julia', 'Lua', 'Pascal', 'COBOL',
         'Fortran', 'Assembly', 'Shell Script', 'Bash', 'PowerShell', 'SQL', 'PL/SQL', 'T-SQL'
     ],
-    'web_technologies': [
+    'web_developer': [
         'HTML', 'CSS', 'SASS', 'LESS', 'Bootstrap', 'Tailwind CSS', 'Material UI', 'Ant Design',
         'React', 'Angular', 'Vue.js', 'Svelte', 'Next.js', 'Nuxt.js', 'Gatsby', 'React Native',
         'Flutter', 'Ionic', 'Cordova', 'PhoneGap', 'Progressive Web Apps', 'WebAssembly',
