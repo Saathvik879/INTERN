@@ -1,0 +1,3296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InternAI - Smart Internship Platform</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            /* Theme Colors */
+            --primary: #667eea;
+            --primary-dark: #5a6fd8;
+            --secondary: #764ba2;
+            --accent: #4facfe;
+            --success: #43e97b;
+            --error: #ff6b6b;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            
+            /* Background & Surface */
+            --bg-primary: #0f0f23;
+            --bg-secondary: #1a1a3e;
+            --bg-tertiary: #252547;
+            --surface: rgba(255,255,255,0.05);
+            --glass: rgba(255,255,255,0.1);
+            --glass-hover: rgba(255,255,255,0.15);
+            
+            /* Text */
+            --text-primary: #ffffff;
+            --text-secondary: #b8bcc8;
+            --text-muted: #6b7280;
+            --text-inverse: #1a202c;
+            
+            /* Borders & Shadows */
+            --border: rgba(255,255,255,0.15);
+            --border-light: rgba(255,255,255,0.08);
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+            --shadow-xl: 0 25px 50px -12px rgba(0,0,0,0.25);
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            --gradient-success: linear-gradient(135deg, var(--success) 0%, #38f9d7 100%);
+            --gradient-bg: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            
+            /* Spacing */
+            --space-xs: 0.25rem;
+            --space-sm: 0.5rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            --space-2xl: 3rem;
+            --space-3xl: 4rem;
+            
+            /* Border Radius */
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            --radius-2xl: 24px;
+            --radius-full: 9999px;
+            
+            /* Transitions */
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Light Theme */
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --surface: rgba(0,0,0,0.02);
+            --glass: rgba(0,0,0,0.05);
+            --glass-hover: rgba(0,0,0,0.08);
+            --text-primary: #1a202c;
+            --text-secondary: #4a5568;
+            --text-muted: #718096;
+            --text-inverse: #ffffff;
+            --border: rgba(0,0,0,0.1);
+            --border-light: rgba(0,0,0,0.05);
+        }
+        
+        /* High Contrast Theme */
+        [data-theme="contrast"] {
+            --bg-primary: #000000;
+            --bg-secondary: #1a1a1a;
+            --bg-tertiary: #2d2d2d;
+            --surface: rgba(255,255,255,0.08);
+            --glass: rgba(255,255,255,0.12);
+            --glass-hover: rgba(255,255,255,0.16);
+            --text-primary: #ffffff;
+            --text-secondary: #e2e8f0;
+            --text-muted: #cbd5e0;
+            --border: rgba(255,255,255,0.2);
+            --border-light: rgba(255,255,255,0.1);
+        }
+        
+        /* Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: var(--transition);
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--surface);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--glass);
+            border-radius: var(--radius-full);
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--glass-hover);
+        }
+        
+        /* Background Effects */
+        .bg-effects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .bg-gradient {
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            background: var(--gradient-bg);
+            opacity: 0.03;
+            animation: float 30s ease-in-out infinite;
+        }
+        
+        .bg-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .bg-shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            animation: drift 20s ease-in-out infinite;
+        }
+        
+        .bg-shape:nth-child(1) {
+            width: 200px;
+            height: 200px;
+            background: var(--primary);
+            opacity: 0.05;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .bg-shape:nth-child(2) {
+            width: 300px;
+            height: 300px;
+            background: var(--secondary);
+            opacity: 0.03;
+            top: 60%;
+            right: 10%;
+            animation-delay: -10s;
+        }
+        
+        .bg-shape:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            background: var(--accent);
+            opacity: 0.04;
+            bottom: 20%;
+            left: 30%;
+            animation-delay: -20s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(-20px, -20px) rotate(120deg); }
+            66% { transform: translate(20px, -10px) rotate(240deg); }
+        }
+        
+        @keyframes drift {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(30px, -30px); }
+            50% { transform: translate(-20px, 20px); }
+            75% { transform: translate(20px, 10px); }
+        }
+        
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 15, 35, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            transition: var(--transition);
+        }
+        
+        [data-theme="light"] .header {
+            background: rgba(255, 255, 255, 0.8);
+        }
+        
+        [data-theme="contrast"] .header {
+            background: rgba(0, 0, 0, 0.9);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-md) var(--space-xl);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 1.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .logo:hover {
+            transform: scale(1.05);
+        }
+        
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+        
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: var(--space-sm) var(--space-md);
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: var(--radius-lg);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-primary);
+            opacity: 0.1;
+            transition: var(--transition);
+        }
+        
+        .nav-btn:hover::before,
+        .nav-btn.active::before {
+            left: 0;
+        }
+        
+        .nav-btn:hover,
+        .nav-btn.active {
+            background: var(--glass);
+            border-color: var(--border);
+            color: var(--text-primary);
+            transform: translateY(-1px);
+        }
+        
+        .auth-section {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+        
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: var(--space-sm);
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .theme-toggle:hover {
+            background: var(--glass-hover);
+            transform: translateY(-1px);
+        }
+        
+        .user-profile {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            cursor: pointer;
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-lg);
+            transition: var(--transition);
+        }
+        
+        .user-profile:hover {
+            background: var(--glass);
+        }
+        
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-full);
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .user-avatar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 2px solid var(--primary);
+            border-radius: inherit;
+            opacity: 0;
+            transform: scale(1.1);
+            transition: var(--transition);
+        }
+        
+        .user-profile:hover .user-avatar::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .dropdown {
+            position: absolute;
+            top: calc(100% + var(--space-xs));
+            right: 0;
+            min-width: 240px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            padding: var(--space-sm);
+            transform: translateY(10px);
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            z-index: 2000;
+        }
+        
+        .dropdown.show {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .dropdown-header {
+            padding: var(--space-md);
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: var(--space-sm);
+        }
+        
+        .dropdown-header h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: var(--space-xs);
+        }
+        
+        .dropdown-header p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .dropdown-item:hover {
+            background: var(--glass);
+            color: var(--text-primary);
+            transform: translateX(2px);
+        }
+        
+        .dropdown-item i {
+            width: 18px;
+            text-align: center;
+        }
+        
+        .dropdown-divider {
+            height: 1px;
+            background: var(--border-light);
+            margin: var(--space-sm) 0;
+        }
+        
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-xs);
+            padding: var(--space-sm) var(--space-lg);
+            border: none;
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .btn:active::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: var(--glass);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--glass-hover);
+            transform: translateY(-1px);
+        }
+        
+        .btn-success {
+            background: var(--gradient-success);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid transparent;
+        }
+        
+        .btn-ghost:hover {
+            background: var(--glass);
+            color: var(--text-primary);
+        }
+        
+        .btn-sm {
+            padding: var(--space-xs) var(--space-sm);
+            font-size: 0.8rem;
+        }
+        
+        .btn-lg {
+            padding: var(--space-md) var(--space-xl);
+            font-size: 1.1rem;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        /* Auth Buttons */
+        .btn-google {
+            background: #db4437;
+            color: white;
+        }
+        
+        .btn-google:hover {
+            background: #c23321;
+            transform: translateY(-2px);
+        }
+        
+        .btn-github {
+            background: #333;
+            color: white;
+        }
+        
+        .btn-github:hover {
+            background: #24292e;
+            transform: translateY(-2px);
+        }
+        
+        /* Main Content */
+        .main {
+            margin-top: 80px;
+            min-height: calc(100vh - 80px);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--space-xl);
+        }
+        
+        .content {
+            padding: var(--space-xl) 0;
+        }
+        
+        /* Welcome/Landing Page */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 80px);
+            text-align: center;
+            padding: var(--space-2xl) var(--space-xl);
+            position: relative;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            z-index: 2;
+        }
+        
+        .hero h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: var(--space-lg);
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInUp 1s ease-out;
+        }
+        
+        .hero p {
+            font-size: clamp(1.1rem, 2vw, 1.3rem);
+            color: var(--text-secondary);
+            margin-bottom: var(--space-2xl);
+            line-height: 1.6;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+        
+        .hero-actions {
+            display: flex;
+            gap: var(--space-lg);
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease-out 0.4s both;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Features Grid */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-xl);
+            margin: var(--space-3xl) 0;
+        }
+        
+        .feature {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            text-align: center;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+        }
+        
+        .feature:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto var(--space-lg);
+            background: var(--gradient-primary);
+            border-radius: var(--radius-xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        .feature h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: var(--space-sm);
+        }
+        
+        .feature p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+        
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-2xl);
+            width: 90%;
+            max-width: 450px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.9) translateY(20px);
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        .modal-overlay.show .modal {
+            transform: scale(1) translateY(0);
+        }
+        
+        .modal-header {
+            text-align: center;
+            margin-bottom: var(--space-xl);
+        }
+        
+        .modal-header h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: var(--space-sm);
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .modal-header p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: var(--space-lg);
+            right: var(--space-lg);
+            background: var(--glass);
+            border: none;
+            border-radius: var(--radius-full);
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-secondary);
+        }
+        
+        .modal-close:hover {
+            background: var(--glass-hover);
+            color: var(--text-primary);
+        }
+        
+        .oauth-section {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+        
+        /* Dashboard */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--space-2xl);
+            flex-wrap: wrap;
+            gap: var(--space-lg);
+        }
+        
+        .page-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            font-weight: 700;
+            margin-bottom: var(--space-sm);
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+        
+        .page-actions {
+            display: flex;
+            gap: var(--space-sm);
+            flex-wrap: wrap;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-lg);
+            margin-bottom: var(--space-2xl);
+        }
+        
+        .stat-card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+        }
+        
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--space-md);
+        }
+        
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: var(--space-xs);
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .stat-change {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--success);
+            margin-top: var(--space-xs);
+        }
+        
+        .stat-change.negative {
+            color: var(--error);
+        }
+        
+        /* Cards */
+        .card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            margin-bottom: var(--space-xl);
+            transition: var(--transition);
+        }
+        
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-lg);
+            padding-bottom: var(--space-md);
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .card-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+        
+        .card-actions {
+            display: flex;
+            gap: var(--space-sm);
+        }
+        
+        /* Internship Cards */
+        .internships-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: var(--space-lg);
+        }
+        
+        .internship-card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .internship-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transition: var(--transition);
+        }
+        
+        .internship-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary);
+        }
+        
+        .internship-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .internship-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--space-md);
+        }
+        
+        .company-logo {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+            margin-right: var(--space-md);
+            flex-shrink: 0;
+        }
+        
+        .internship-info {
+            flex: 1;
+        }
+        
+        .internship-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: var(--space-xs);
+            line-height: 1.3;
+        }
+        
+        .internship-company {
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-bottom: var(--space-sm);
+        }
+        
+        .internship-meta {
+            display: flex;
+            gap: var(--space-lg);
+            margin-bottom: var(--space-md);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            flex-wrap: wrap;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+        
+        .internship-description {
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: var(--space-lg);
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .skills-section {
+            margin-bottom: var(--space-lg);
+        }
+        
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-xs);
+        }
+        
+        .skill-tag {
+            background: rgba(102, 126, 234, 0.15);
+            color: var(--primary);
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-full);
+            font-size: 0.8rem;
+            font-weight: 500;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: var(--transition);
+        }
+        
+        .skill-tag:hover {
+            background: rgba(102, 126, 234, 0.25);
+            transform: scale(1.05);
+        }
+        
+        .internship-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            padding-top: var(--space-md);
+            border-top: 1px solid var(--border-light);
+        }
+        
+        .match-score {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-weight: 600;
+        }
+        
+        .score-circle {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: conic-gradient(var(--success) var(--score-angle, 270deg), var(--border) 0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .score-circle::before {
+            content: '';
+            position: absolute;
+            width: 28px;
+            height: 28px;
+            background: var(--bg-secondary);
+            border-radius: 50%;
+        }
+        
+        .score-value {
+            position: relative;
+            z-index: 1;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--success);
+        }
+        
+        .score-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        /* Search & Filters */
+        .search-section {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            margin-bottom: var(--space-xl);
+        }
+        
+        .search-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: var(--space-md);
+            align-items: end;
+        }
+        
+        .search-input {
+            position: relative;
+        }
+        
+        .search-input input {
+            padding-left: 3rem;
+        }
+        
+        .search-input .search-icon {
+            position: absolute;
+            left: var(--space-md);
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+        
+        .filter-select {
+            position: relative;
+        }
+        
+        .filter-select select {
+            width: 100%;
+            padding: var(--space-md);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            background: var(--glass);
+            color: var(--text-primary);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .filter-select select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        /* Form Elements */
+        .form-group {
+            margin-bottom: var(--space-lg);
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: var(--space-sm);
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: var(--space-md);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            background: var(--glass);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(102,126,234,0.1);
+            transform: translateY(-1px);
+        }
+        
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+        
+        .form-textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        
+        /* Profile Settings */
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-xl);
+        }
+        
+        .profile-section {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-lg);
+            padding-bottom: var(--space-md);
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .section-header h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .section-header .section-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        /* GitHub Profile Display */
+        .github-profile {
+            background: var(--surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            margin-top: var(--space-md);
+        }
+        
+        .github-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-md);
+        }
+        
+        .github-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: var(--radius-full);
+            border: 2px solid var(--primary);
+        }
+        
+        .github-info h4 {
+            font-weight: 600;
+            margin-bottom: var(--space-xs);
+        }
+        
+        .github-info p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .github-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-md);
+            margin-bottom: var(--space-md);
+        }
+        
+        .github-stat {
+            text-align: center;
+            padding: var(--space-md);
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: var(--radius-md);
+        }
+        
+        .github-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: var(--space-xs);
+        }
+        
+        .github-stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        
+        .github-languages,
+        .github-skills {
+            margin-top: var(--space-md);
+        }
+        
+        .github-languages h5,
+        .github-skills h5 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: var(--space-sm);
+            color: var(--text-primary);
+        }
+        
+        .languages-list,
+        .skills-detected {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-xs);
+        }
+        
+        .language-tag,
+        .skill-detected {
+            background: rgba(102, 126, 234, 0.2);
+            color: var(--primary);
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        /* File Upload */
+        .file-upload {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .file-upload input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+        
+        .file-upload-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            padding: var(--space-lg);
+            border: 2px dashed var(--border);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            color: var(--text-secondary);
+        }
+        
+        .file-upload-label:hover,
+        .file-upload.dragover .file-upload-label {
+            border-color: var(--primary);
+            background: rgba(102, 126, 234, 0.05);
+            color: var(--text-primary);
+        }
+        
+        .file-upload-icon {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+        
+        .file-upload-text {
+            font-weight: 500;
+        }
+        
+        .file-upload-hint {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: var(--space-xs);
+        }
+        
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: var(--space-xl);
+            right: var(--space-xl);
+            z-index: 4000;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+        
+        .toast {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-md) var(--space-lg);
+            box-shadow: var(--shadow-xl);
+            max-width: 350px;
+            transform: translateX(100%);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--success);
+        }
+        
+        .toast.error::before {
+            background: var(--error);
+        }
+        
+        .toast.warning::before {
+            background: var(--warning);
+        }
+        
+        .toast.info::before {
+            background: var(--info);
+        }
+        
+        .toast-content {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+        
+        .toast-icon {
+            font-size: 1.2rem;
+            color: var(--success);
+        }
+        
+        .toast.error .toast-icon {
+            color: var(--error);
+        }
+        
+        .toast.warning .toast-icon {
+            color: var(--warning);
+        }
+        
+        .toast.info .toast-icon {
+            color: var(--info);
+        }
+        
+        .toast-message {
+            flex: 1;
+            font-weight: 500;
+        }
+        
+        .toast-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: var(--space-xs);
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+        
+        .toast-close:hover {
+            background: var(--glass);
+            color: var(--text-primary);
+        }
+        
+        /* Loading States */
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-3xl);
+            text-align: center;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: var(--space-md);
+        }
+        
+        .loading-text {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Empty States */
+        .empty-state {
+            text-align: center;
+            padding: var(--space-3xl);
+            color: var(--text-secondary);
+        }
+        
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: var(--space-lg);
+            opacity: 0.5;
+        }
+        
+        .empty-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: var(--space-sm);
+            color: var(--text-primary);
+        }
+        
+        .empty-description {
+            margin-bottom: var(--space-lg);
+            line-height: 1.5;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .container {
+                padding: 0 var(--space-lg);
+            }
+            
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                padding: var(--space-md);
+                flex-wrap: wrap;
+            }
+            
+            .nav {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+                margin-top: var(--space-sm);
+            }
+            
+            .main {
+                margin-top: 120px;
+            }
+            
+            .container {
+                padding: 0 var(--space-md);
+            }
+            
+            .hero {
+                padding: var(--space-xl) var(--space-md);
+            }
+            
+            .hero-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .internships-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            .internship-meta {
+                flex-direction: column;
+                gap: var(--space-sm);
+            }
+            
+            .internship-footer {
+                flex-direction: column;
+                gap: var(--space-md);
+                align-items: stretch;
+            }
+            
+            .toast-container {
+                top: var(--space-md);
+                right: var(--space-md);
+                left: var(--space-md);
+            }
+            
+            .toast {
+                max-width: none;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .modal {
+                padding: var(--space-lg);
+                margin: var(--space-md);
+            }
+            
+            .btn-lg {
+                padding: var(--space-md) var(--space-lg);
+            }
+        }
+        
+        /* Focus Styles */
+        .btn:focus,
+        .nav-btn:focus,
+        .form-input:focus,
+        .dropdown-item:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <!-- Background Effects -->
+    <div class="bg-effects">
+        <div class="bg-gradient"></div>
+        <div class="bg-shapes">
+            <div class="bg-shape"></div>
+            <div class="bg-shape"></div>
+            <div class="bg-shape"></div>
+        </div>
+    </div>
+    
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo" onclick="navigateToPage('welcome')">
+                <i class="fas fa-brain"></i>
+                <span>InternAI</span>
+            </div>
+            
+            <nav class="nav" id="navigation">
+                <!-- Navigation populated by JS -->
+            </nav>
+            
+            <div class="auth-section">
+                <button class="theme-toggle" onclick="toggleTheme()">
+                    <i id="theme-icon" class="fas fa-moon"></i>
+                    <span id="theme-text">Dark</span>
+                </button>
+                
+                <!-- Auth Buttons (shown when not logged in) -->
+                <div id="authButtons" class="auth-buttons">
+                    <button class="btn btn-ghost" onclick="showAuthModal()">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Login
+                    </button>
+                    <button class="btn btn-primary" onclick="showAuthModal()">
+                        <i class="fas fa-rocket"></i>
+                        Get Started
+                    </button>
+                </div>
+                
+                <!-- User Profile (shown when logged in) -->
+                <div class="user-profile" id="userProfile" style="display: none;" onclick="toggleDropdown()">
+                    <div class="user-avatar" id="userAvatar">
+                        <img id="userAvatarImg" style="display: none;" alt="User Avatar">
+                        <span id="userAvatarText">U</span>
+                    </div>
+                    <div>
+                        <div id="userName" style="font-weight: 600; font-size: 0.9rem;">User</div>
+                        <div id="userEmail" style="font-size: 0.8rem; color: var(--text-muted);"></div>
+                    </div>
+                    <i class="fas fa-chevron-down" style="transition: var(--transition);"></i>
+                    
+                    <div class="dropdown" id="userDropdown">
+                        <div class="dropdown-header">
+                            <h4 id="dropdownUserName">User</h4>
+                            <p id="dropdownUserEmail">user@example.com</p>
+                        </div>
+                        
+                        <div class="dropdown-item" onclick="navigateToPage('profile')">
+                            <i class="fas fa-user"></i>
+                            <span>Profile Settings</span>
+                        </div>
+                        
+                        <div class="dropdown-item" onclick="navigateToPage('dashboard')">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </div>
+                        
+                        <div class="dropdown-item" onclick="navigateToPage('internships')">
+                            <i class="fas fa-briefcase"></i>
+                            <span>Browse Internships</span>
+                        </div>
+                        
+                        <div class="dropdown-item" onclick="navigateToPage('analytics')">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Analytics</span>
+                        </div>
+                        
+                        <div class="dropdown-divider"></div>
+                        
+                        <div class="dropdown-item" onclick="showSettings()">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </div>
+                        
+                        <div class="dropdown-item" onclick="showHelp()">
+                            <i class="fas fa-question-circle"></i>
+                            <span>Help & Support</span>
+                        </div>
+                        
+                        <div class="dropdown-divider"></div>
+                        
+                        <div class="dropdown-item" onclick="logout()" style="color: var(--error);">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Auth Modal -->
+    <div class="modal-overlay" id="authModal">
+        <div class="modal">
+            <button class="modal-close" onclick="closeAuthModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="modal-header">
+                <h2>Welcome to InternAI</h2>
+                <p>Sign in to access your personalized internship dashboard</p>
+            </div>
+            
+            <!-- OAuth Section Only -->
+            <div class="oauth-section">
+                <button class="btn btn-google btn-lg" onclick="signInWithGoogle()">
+                    <i class="fab fa-google"></i>
+                    <span>Continue with Google</span>
+                </button>
+                <button class="btn btn-github btn-lg" onclick="signInWithGitHub()">
+                    <i class="fab fa-github"></i>
+                    <span>Continue with GitHub</span>
+                </button>
+            </div>
+            
+            <p style="text-align: center; margin-top: var(--space-lg); color: var(--text-secondary); font-size: 0.9rem;">
+                By continuing, you agree to our Terms of Service and Privacy Policy
+            </p>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <main class="main">
+        <div id="app"></div>
+    </main>
+    
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    
+    <!-- React -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <script type="text/babel">
+        const { useState, useEffect, useRef, useCallback } = React;
+        
+        // Firebase Configuration - YOUR ORIGINAL CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyBW-ZWLefiXpBycXaU3hwjrr9BGjFQWJjs",
+            authDomain: "intern-4e292.firebaseapp.com",
+            databaseURL: "https://intern-4e292-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "intern-4e292",
+            storageBucket: "intern-4e292.firebasestorage.app",
+            messagingSenderId: "949956168199",
+            appId: "1:949956168199:web:20f6796aa5fb38440b38a2",
+            measurementId: "G-WM7PKGN7GP"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.database();
+        
+        // OAuth Providers
+        const googleProvider = new firebase.auth.GoogleAuthProvider();
+        googleProvider.addScope('profile');
+        googleProvider.addScope('email');
+        
+        const githubProvider = new firebase.auth.GithubAuthProvider();
+        githubProvider.addScope('read:user');
+        githubProvider.addScope('user:email');
+        githubProvider.addScope('repo');
+        
+        // API Configuration
+        const API_BASE = 'http://localhost:8000';
+        
+        // Global State
+        let currentUser = null;
+        let currentPage = 'welcome';
+        let userData = null;
+        let isAuthenticated = false;
+        
+        // Theme Management
+        const themes = ['dark', 'light', 'contrast'];
+        let currentTheme = localStorage.getItem('theme') || 'dark';
+        
+        function toggleTheme() {
+            const currentIndex = themes.indexOf(currentTheme);
+            const nextIndex = (currentIndex + 1) % themes.length;
+            currentTheme = themes[nextIndex];
+            
+            document.body.setAttribute('data-theme', currentTheme);
+            localStorage.setItem('theme', currentTheme);
+            
+            updateThemeUI();
+            showToast(`Switched to ${currentTheme} theme`, 'info');
+        }
+        
+        function updateThemeUI() {
+            const icon = document.getElementById('theme-icon');
+            const text = document.getElementById('theme-text');
+            
+            switch(currentTheme) {
+                case 'light':
+                    icon.className = 'fas fa-sun';
+                    text.textContent = 'Light';
+                    break;
+                case 'contrast':
+                    icon.className = 'fas fa-adjust';
+                    text.textContent = 'Contrast';
+                    break;
+                default:
+                    icon.className = 'fas fa-moon';
+                    text.textContent = 'Dark';
+            }
+        }
+        
+        // Initialize theme
+        document.body.setAttribute('data-theme', currentTheme);
+        updateThemeUI();
+        
+        // Toast Notification System
+        let toastId = 0;
+        function showToast(message, type = 'success', duration = 4000) {
+            const container = document.getElementById('toastContainer');
+            const id = ++toastId;
+            
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <div class="toast-content">
+                    <i class="toast-icon fas fa-${getToastIcon(type)}"></i>
+                    <div class="toast-message">${message}</div>
+                    <button class="toast-close" onclick="removeToast(${id})">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            container.appendChild(toast);
+            
+            // Show toast
+            setTimeout(() => toast.classList.add('show'), 100);
+            
+            // Auto remove
+            setTimeout(() => removeToast(id), duration);
+            
+            // Store reference for manual removal
+            toast.dataset.toastId = id;
+        }
+        
+        function getToastIcon(type) {
+            switch(type) {
+                case 'success': return 'check-circle';
+                case 'error': return 'exclamation-triangle';
+                case 'warning': return 'exclamation-triangle';
+                case 'info': return 'info-circle';
+                default: return 'check-circle';
+            }
+        }
+        
+        function removeToast(id) {
+            const toast = document.querySelector(`[data-toast-id="${id}"]`);
+            if (toast) {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }
+        }
+        
+        // Navigation Management - FIXED
+        function updateNavigation(authenticated) {
+            const nav = document.getElementById('navigation');
+            
+            if (authenticated) {
+                nav.innerHTML = `
+                    <button class="nav-btn" onclick="navigateToPage('dashboard')" data-page="dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </button>
+                    <button class="nav-btn" onclick="navigateToPage('internships')" data-page="internships">
+                        <i class="fas fa-briefcase"></i>
+                        <span>Internships</span>
+                    </button>
+                    <button class="nav-btn" onclick="navigateToPage('analytics')" data-page="analytics">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Analytics</span>
+                    </button>
+                `;
+            } else {
+                nav.innerHTML = '';
+            }
+            
+            // Update active nav button
+            setTimeout(() => {
+                updateActiveNavButton();
+            }, 100);
+        }
+        
+        function updateActiveNavButton() {
+            // Remove active class from all nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            
+            // Add active class to current page button
+            const activeBtn = document.querySelector(`[data-page="${currentPage}"]`);
+            if (activeBtn) {
+                activeBtn.classList.add('active');
+            }
+        }
+        
+        // Page navigation function - FIXED
+        function navigateToPage(page) {
+            console.log('Navigating to:', page);
+            setPage(page);
+        }
+        
+        // Authentication Functions - OAuth Only
+        async function signInWithGoogle() {
+            try {
+                const result = await auth.signInWithPopup(googleProvider);
+                showToast('Successfully signed in with Google!', 'success');
+                closeAuthModal();
+                
+                // Store additional user data
+                await storeUserData(result.user, { provider: 'google' });
+                
+            } catch (error) {
+                console.error('Google sign-in error:', error);
+                showToast(getOAuthErrorMessage(error), 'error');
+            }
+        }
+        
+        async function signInWithGitHub() {
+            try {
+                const result = await auth.signInWithPopup(githubProvider);
+                const credential = firebase.auth.GithubAuthProvider.credentialFromResult(result);
+                
+                // Store GitHub access token
+                if (credential.accessToken) {
+                    localStorage.setItem('github_token', credential.accessToken);
+                }
+                
+                showToast('Successfully signed in with GitHub!', 'success');
+                closeAuthModal();
+                
+                // Store additional user data
+                await storeUserData(result.user, { 
+                    provider: 'github',
+                    githubToken: credential.accessToken
+                });
+                
+            } catch (error) {
+                console.error('GitHub sign-in error:', error);
+                showToast(getOAuthErrorMessage(error), 'error');
+            }
+        }
+        
+        async function storeUserData(user, additionalData = {}) {
+            try {
+                const userRef = db.ref(`users/${user.uid}`);
+                await userRef.set({
+                    email: user.email,
+                    displayName: user.displayName,
+                    photoURL: user.photoURL,
+                    lastLogin: firebase.database.ServerValue.TIMESTAMP,
+                    ...additionalData
+                });
+            } catch (error) {
+                console.error('Error storing user data:', error);
+            }
+        }
+        
+        function getOAuthErrorMessage(error) {
+            switch (error.code) {
+                case 'auth/popup-closed-by-user':
+                    return 'Sign-in was cancelled.';
+                case 'auth/popup-blocked':
+                    return 'Sign-in popup was blocked. Please allow popups and try again.';
+                case 'auth/network-request-failed':
+                    return 'Network error. Please check your connection.';
+                case 'auth/too-many-requests':
+                    return 'Too many attempts. Please try again later.';
+                case 'auth/user-disabled':
+                    return 'This account has been disabled.';
+                case 'auth/account-exists-with-different-credential':
+                    return 'An account already exists with the same email address but different sign-in method.';
+                default:
+                    return error.message || 'An error occurred during authentication.';
+            }
+        }
+        
+        // Auth Modal Functions - Simplified
+        function showAuthModal() {
+            const modal = document.getElementById('authModal');
+            modal.classList.add('show');
+            
+            // Focus first OAuth button
+            setTimeout(() => {
+                const firstButton = modal.querySelector('.btn-google');
+                if (firstButton) firstButton.focus();
+            }, 300);
+        }
+        
+        function closeAuthModal() {
+            const modal = document.getElementById('authModal');
+            modal.classList.remove('show');
+        }
+        
+        // Auth State Observer - FIXED
+        auth.onAuthStateChanged(async (user) => {
+            console.log('Auth state changed:', user ? 'User logged in' : 'User logged out');
+            currentUser = user;
+            isAuthenticated = !!user;
+            
+            const authButtons = document.getElementById('authButtons');
+            const userProfile = document.getElementById('userProfile');
+            
+            if (user) {
+                console.log('User authenticated, updating UI...');
+                
+                // User is signed in
+                authButtons.style.display = 'none';
+                userProfile.style.display = 'flex';
+                
+                // Update user profile UI
+                updateUserProfileUI(user);
+                
+                // Update navigation with authenticated buttons
+                updateNavigation(true);
+                
+                // Load user data from database
+                try {
+                    const userRef = db.ref(`users/${user.uid}`);
+                    const snapshot = await userRef.once('value');
+                    userData = snapshot.val() || {};
+                } catch (error) {
+                    console.error('Error loading user data:', error);
+                }
+                
+                // Redirect to dashboard if on welcome page - FIXED
+                if (currentPage === 'welcome') {
+                    console.log('Redirecting from welcome to dashboard...');
+                    setTimeout(() => {
+                        setPage('dashboard');
+                    }, 500); // Small delay to ensure navigation is updated
+                }
+                
+            } else {
+                console.log('User not authenticated, showing welcome...');
+                
+                // User is signed out
+                authButtons.style.display = 'flex';
+                userProfile.style.display = 'none';
+                userData = null;
+                
+                // Remove navigation for unauthenticated users
+                updateNavigation(false);
+                
+                // Clear stored tokens
+                localStorage.removeItem('github_token');
+                
+                // Redirect to welcome page if on protected page
+                if (['dashboard', 'internships', 'analytics', 'profile'].includes(currentPage)) {
+                    setPage('welcome');
+                }
+            }
+        });
+        
+        function updateUserProfileUI(user) {
+            const userAvatar = document.getElementById('userAvatar');
+            const userAvatarImg = document.getElementById('userAvatarImg');
+            const userAvatarText = document.getElementById('userAvatarText');
+            const userName = document.getElementById('userName');
+            const userEmail = document.getElementById('userEmail');
+            const dropdownUserName = document.getElementById('dropdownUserName');
+            const dropdownUserEmail = document.getElementById('dropdownUserEmail');
+            
+            // Update avatar
+            if (user.photoURL) {
+                userAvatarImg.src = user.photoURL;
+                userAvatarImg.style.display = 'block';
+                userAvatarText.style.display = 'none';
+            } else {
+                userAvatarImg.style.display = 'none';
+                userAvatarText.style.display = 'block';
+                userAvatarText.textContent = (user.displayName || user.email).charAt(0).toUpperCase();
+            }
+            
+            // Update name and email
+            const displayName = user.displayName || user.email.split('@')[0];
+            userName.textContent = displayName;
+            userEmail.textContent = user.email;
+            dropdownUserName.textContent = displayName;
+            dropdownUserEmail.textContent = user.email;
+        }
+        
+        // Dropdown Functions
+        function toggleDropdown() {
+            const dropdown = document.getElementById('userDropdown');
+            const chevron = document.querySelector('.user-profile .fa-chevron-down');
+            
+            dropdown.classList.toggle('show');
+            
+            if (dropdown.classList.contains('show')) {
+                chevron.style.transform = 'rotate(180deg)';
+            } else {
+                chevron.style.transform = 'rotate(0deg)';
+            }
+        }
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.user-profile')) {
+                const dropdown = document.getElementById('userDropdown');
+                const chevron = document.querySelector('.user-profile .fa-chevron-down');
+                dropdown.classList.remove('show');
+                if (chevron) chevron.style.transform = 'rotate(0deg)';
+            }
+        });
+        
+        function logout() {
+            auth.signOut();
+            showToast('Successfully logged out. See you soon!', 'info');
+        }
+        
+        function showSettings() {
+            setPage('profile');
+        }
+        
+        function showHelp() {
+            showToast('Help & Support coming soon!', 'info');
+        }
+        
+        // API Service
+        const apiService = {
+            async getInternships(limit = 30, force = false) {
+                try {
+                    const response = await fetch(`${API_BASE}/api/internships/live?limit=${limit}&force=${force}`);
+                    if (!response.ok) throw new Error('Failed to fetch internships');
+                    return await response.json();
+                } catch (error) {
+                    console.error('API Error:', error);
+                    showToast('Unable to fetch internships. Using cached data.', 'warning');
+                    return { internships: [], total: 0, sources: [], last_updated: '', cache_hit: false };
+                }
+            },
+            
+            async matchInternships(userProfile) {
+                try {
+                    const response = await fetch(`${API_BASE}/api/match/ai`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(userProfile)
+                    });
+                    if (!response.ok) throw new Error('Failed to match internships');
+                    return await response.json();
+                } catch (error) {
+                    console.error('Matching Error:', error);
+                    showToast('AI matching temporarily unavailable.', 'warning');
+                    return { top_matches: [], total_analyzed: 0 };
+                }
+            },
+            
+            async parseResume(file) {
+                try {
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    const response = await fetch(`${API_BASE}/api/resume/parse`, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    if (!response.ok) throw new Error('Failed to parse resume');
+                    return await response.json();
+                } catch (error) {
+                    console.error('Resume Parse Error:', error);
+                    showToast('Resume parsing failed. Please try again.', 'error');
+                    return null;
+                }
+            },
+            
+            async analyzeGitHub(username) {
+                try {
+                    const response = await fetch(`${API_BASE}/api/github/analyze/${username}`);
+                    if (!response.ok) throw new Error('Failed to analyze GitHub');
+                    return await response.json();
+                } catch (error) {
+                    console.error('GitHub Analysis Error:', error);
+                    showToast('GitHub analysis failed. Please check the username.', 'error');
+                    return null;
+                }
+            },
+            
+            async healthCheck() {
+                try {
+                    const response = await fetch(`${API_BASE}/api/health`);
+                    return await response.json();
+                } catch (error) {
+                    return { status: 'disconnected' };
+                }
+            }
+        };
+        
+        // Page Management - FIXED
+        function setPage(page) {
+            console.log('Setting page to:', page, 'Auth status:', isAuthenticated);
+            
+            // Check authentication for protected pages
+            if (['dashboard', 'internships', 'analytics', 'profile'].includes(page) && !isAuthenticated) {
+                console.log('Protected page requested but user not authenticated');
+                showAuthModal();
+                return;
+            }
+            
+            currentPage = page;
+            console.log('Current page set to:', currentPage);
+            
+            // Update active nav button
+            updateActiveNavButton();
+            
+            // Close any open dropdowns
+            const dropdown = document.getElementById('userDropdown');
+            if (dropdown) {
+                dropdown.classList.remove('show');
+            }
+            
+            // Re-render the app
+            renderApp();
+        }
+        
+        // React Components
+        function WelcomePage() {
+            return (
+                <div className="container">
+                    <div className="hero">
+                        <div className="hero-content">
+                            <h1>Find Your Dream Internship with AI</h1>
+                            <p>
+                                Leverage cutting-edge artificial intelligence to discover perfect internship matches 
+                                based on your skills, interests, and career goals. Join thousands of students 
+                                already using InternAI to launch their careers.
+                            </p>
+                            <div className="hero-actions">
+                                <button className="btn btn-primary btn-lg" onClick={() => showAuthModal()}>
+                                    <i className="fas fa-rocket"></i>
+                                    Start Your Journey
+                                </button>
+                                <button className="btn btn-outline btn-lg" onClick={() => showAuthModal()}>
+                                    <i className="fas fa-sign-in-alt"></i>
+                                    Sign In
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div className="features">
+                        <div className="feature">
+                            <div className="feature-icon">
+                                <i className="fas fa-brain"></i>
+                            </div>
+                            <h3>AI-Powered Matching</h3>
+                            <p>
+                                Our advanced AI analyzes your profile, skills, and preferences to find 
+                                the most relevant internship opportunities tailored just for you.
+                            </p>
+                        </div>
+                        
+                        <div className="feature">
+                            <div className="feature-icon">
+                                <i className="fas fa-chart-line"></i>
+                            </div>
+                            <h3>Real-time Analytics</h3>
+                            <p>
+                                Track your application progress, get insights on your profile performance, 
+                                and receive personalized recommendations to improve your success rate.
+                            </p>
+                        </div>
+                        
+                        <div className="feature">
+                            <div className="feature-icon">
+                                <i className="fab fa-github"></i>
+                            </div>
+                            <h3>GitHub Integration</h3>
+                            <p>
+                                Showcase your coding projects and contributions. Our system analyzes your 
+                                GitHub activity to match you with tech internships that value your skills.
+                            </p>
+                        </div>
+                        
+                        <div className="feature">
+                            <div className="feature-icon">
+                                <i className="fas fa-file-alt"></i>
+                            </div>
+                            <h3>Smart Resume Analysis</h3>
+                            <p>
+                                Upload your resume and get AI-powered insights. Extract skills automatically 
+                                and receive suggestions to optimize your profile for better matches.
+                            </p>
+                        </div>
+                        
+                        <div className="feature">
+                            <div className="feature-icon">
+                                <i className="fas fa-search"></i>
+                            </div>
+                            <h3>Advanced Search</h3>
+                            <p>
+                                Use powerful filters to find internships by location, company, skills, 
+                                duration, and more. Save your searches and get notified of new matches.
+                            </p>
+                        </div>
+                        
+                        <div className="feature">
+                            <div className="feature-icon">
+                                <i className="fas fa-bell"></i>
+                            </div>
+                            <h3>Smart Notifications</h3>
+                            <p>
+                                Never miss an opportunity. Get timely notifications about new matches, 
+                                application deadlines, and important updates from your target companies.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+        
+        function Dashboard() {
+            const [stats, setStats] = useState({
+                profileViews: 0,
+                applications: 0,
+                interviews: 0,
+                skillMatches: 0
+            });
+            const [internships, setInternships] = useState([]);
+            const [loading, setLoading] = useState(true);
+            const [healthStatus, setHealthStatus] = useState('checking');
+            
+            useEffect(() => {
+                async function loadDashboard() {
+                    try {
+                        // Check API health
+                        const health = await apiService.healthCheck();
+                        setHealthStatus(health.status === 'healthy' ? 'connected' : 'disconnected');
+                        
+                        // Load internships
+                        const data = await apiService.getInternships(6);
+                        setInternships(data.internships || []);
+                        
+                        // Simulate stats (replace with real data from your API)
+                        setStats({
+                            profileViews: 428 + Math.floor(Math.random() * 100),
+                            applications: 12 + Math.floor(Math.random() * 10),
+                            interviews: 4 + Math.floor(Math.random() * 3),
+                            skillMatches: 15 + Math.floor(Math.random() * 5)
+                        });
+                        
+                    } catch (error) {
+                        console.error('Dashboard load error:', error);
+                        showToast('Failed to load dashboard data.', 'error');
+                    } finally {
+                        setLoading(false);
+                    }
+                }
+                
+                loadDashboard();
+            }, []);
+            
+            if (loading) {
+                return (
+                    <div className="loading">
+                        <div className="spinner"></div>
+                        <div className="loading-text">Loading your dashboard...</div>
+                    </div>
+                );
+            }
+            
+            return (
+                <div className="container content">
+                    <div className="page-header">
+                        <div>
+                            <h1 className="page-title">
+                                Welcome back, {currentUser?.displayName || 'User'}! 👋
+                            </h1>
+                            <p className="page-subtitle">
+                                Here's your personalized internship dashboard with the latest opportunities and insights.
+                            </p>
+                        </div>
+                        <div className="page-actions">
+                            <button 
+                                className={`btn btn-sm ${healthStatus === 'connected' ? 'btn-success' : 'btn-secondary'}`}
+                                onClick={() => apiService.healthCheck().then(h => setHealthStatus(h.status))}
+                            >
+                                <i className={`fas fa-${healthStatus === 'connected' ? 'check-circle' : 'exclamation-triangle'}`}></i>
+                                API {healthStatus === 'connected' ? 'Connected' : 'Disconnected'}
+                            </button>
+                            <button className="btn btn-outline btn-sm" onClick={() => setPage('profile')}>
+                                <i className="fas fa-user-cog"></i>
+                                Manage Profile
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div className="stats-grid">
+                        <div className="stat-card">
+                            <div className="stat-header">
+                                <div className="stat-icon">
+                                    <i className="fas fa-eye"></i>
+                                </div>
+                            </div>
+                            <div className="stat-value">{stats.profileViews.toLocaleString()}</div>
+                            <div className="stat-label">Profile Views</div>
+                            <div className="stat-change">
+                                <i className="fas fa-arrow-up"></i>
+                                +18% from last month
+                            </div>
+                        </div>
+                        
+                        <div className="stat-card">
+                            <div className="stat-header">
+                                <div className="stat-icon">
+                                    <i className="fas fa-paper-plane"></i>
+                                </div>
+                            </div>
+                            <div className="stat-value">{stats.applications}</div>
+                            <div className="stat-label">Applications Sent</div>
+                            <div className="stat-change">
+                                <i className="fas fa-arrow-up"></i>
+                                +25% from last month
+                            </div>
+                        </div>
+                        
+                        <div className="stat-card">
+                            <div className="stat-header">
+                                <div className="stat-icon">
+                                    <i className="fas fa-calendar-check"></i>
+                                </div>
+                            </div>
+                            <div className="stat-value">{stats.interviews}</div>
+                            <div className="stat-label">Interviews Scheduled</div>
+                            <div className="stat-change">
+                                <i className="fas fa-arrow-up"></i>
+                                +100% from last month
+                            </div>
+                        </div>
+                        
+                        <div className="stat-card">
+                            <div className="stat-header">
+                                <div className="stat-icon">
+                                    <i className="fas fa-bullseye"></i>
+                                </div>
+                            </div>
+                            <div className="stat-value">{stats.skillMatches}</div>
+                            <div className="stat-label">Perfect Skill Matches</div>
+                            <div className="stat-change">
+                                <i className="fas fa-arrow-up"></i>
+                                +12% from last month
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div className="card">
+                        <div className="card-header">
+                            <h2 className="card-title">
+                                <i className="fas fa-fire" style={{color: 'var(--warning)'}}></i>
+                                Hot Internship Opportunities
+                            </h2>
+                            <div className="card-actions">
+                                <button className="btn btn-secondary btn-sm" onClick={() => setPage('internships')}>
+                                    <i className="fas fa-external-link-alt"></i>
+                                    View All
+                                </button>
+                            </div>
+                        </div>
+                        
+                        {internships.length > 0 ? (
+                            <div className="internships-grid">
+                                {internships.map(internship => (
+                                    <InternshipCard key={internship.id} internship={internship} />
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="empty-state">
+                                <div className="empty-icon">
+                                    <i className="fas fa-search"></i>
+                                </div>
+                                <h3 className="empty-title">No internships available</h3>
+                                <p className="empty-description">
+                                    We're currently updating our internship database. Check back soon for new opportunities!
+                                </p>
+                                <button className="btn btn-primary" onClick={() => window.location.reload()}>
+                                    <i className="fas fa-refresh"></i>
+                                    Refresh
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+        
+        function InternshipsPage() {
+            const [internships, setInternships] = useState([]);
+            const [filteredInternships, setFilteredInternships] = useState([]);
+            const [searchTerm, setSearchTerm] = useState('');
+            const [selectedLocation, setSelectedLocation] = useState('');
+            const [selectedCompany, setSelectedCompany] = useState('');
+            const [loading, setLoading] = useState(true);
+            const [lastUpdated, setLastUpdated] = useState('');
+            
+            useEffect(() => {
+                loadInternships();
+            }, []);
+            
+            useEffect(() => {
+                filterInternships();
+            }, [internships, searchTerm, selectedLocation, selectedCompany]);
+            
+            async function loadInternships(force = false) {
+                setLoading(true);
+                try {
+                    const data = await apiService.getInternships(50, force);
+                    setInternships(data.internships || []);
+                    setLastUpdated(data.last_updated || new Date().toISOString());
+                    
+                    if (force) {
+                        showToast('Internships refreshed with latest data!', 'success');
+                    }
+                } catch (error) {
+                    console.error('Error loading internships:', error);
+                    showToast('Failed to load internships.', 'error');
+                } finally {
+                    setLoading(false);
+                }
+            }
+            
+            function filterInternships() {
+                let filtered = internships;
+                
+                if (searchTerm) {
+                    const search = searchTerm.toLowerCase();
+                    filtered = filtered.filter(internship => 
+                        internship.title.toLowerCase().includes(search) ||
+                        internship.company.toLowerCase().includes(search) ||
+                        (internship.skills && internship.skills.some(skill => 
+                            skill.toLowerCase().includes(search)
+                        )) ||
+                        internship.description.toLowerCase().includes(search)
+                    );
+                }
+                
+                if (selectedLocation) {
+                    filtered = filtered.filter(internship => 
+                        internship.location.toLowerCase().includes(selectedLocation.toLowerCase())
+                    );
+                }
+                
+                if (selectedCompany) {
+                    filtered = filtered.filter(internship => 
+                        internship.company.toLowerCase().includes(selectedCompany.toLowerCase())
+                    );
+                }
+                
+                setFilteredInternships(filtered);
+            }
+            
+            const locations = [...new Set(internships.map(i => i.location))].sort();
+            const companies = [...new Set(internships.map(i => i.company))].sort();
+            
+            if (loading) {
+                return (
+                    <div className="loading">
+                        <div className="spinner"></div>
+                        <div className="loading-text">Loading internships...</div>
+                    </div>
+                );
+            }
+            
+            return (
+                <div className="container content">
+                    <div className="page-header">
+                        <div>
+                            <h1 className="page-title">🚀 Discover Internships</h1>
+                            <p className="page-subtitle">
+                                {filteredInternships.length} opportunities from leading companies
+                                {lastUpdated && (
+                                    <span style={{marginLeft: '1rem', fontSize: '0.9rem', color: 'var(--text-muted)'}}>
+                                        • Last updated: {new Date(lastUpdated).toLocaleString()}
+                                    </span>
+                                )}
+                            </p>
+                        </div>
+                        <div className="page-actions">
+                            <button className="btn btn-outline btn-sm" onClick={() => loadInternships(true)}>
+                                <i className="fas fa-sync-alt"></i>
+                                Refresh Data
+                            </button>
+                            <button className="btn btn-primary btn-sm" onClick={() => setPage('profile')}>
+                                <i className="fas fa-user-cog"></i>
+                                Update Profile
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div className="search-section">
+                        <div className="search-grid">
+                            <div className="search-input">
+                                <i className="fas fa-search search-icon"></i>
+                                <input
+                                    type="text"
+                                    className="form-input"
+                                    placeholder="Search internships, companies, or skills..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                            </div>
+                            
+                            <div className="filter-select">
+                                <select
+                                    value={selectedLocation}
+                                    onChange={(e) => setSelectedLocation(e.target.value)}
+                                >
+                                    <option value="">All Locations</option>
+                                    {locations.map(location => (
+                                        <option key={location} value={location}>{location}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            
+                            <div className="filter-select">
+                                <select
+                                    value={selectedCompany}
+                                    onChange={(e) => setSelectedCompany(e.target.value)}
+                                >
+                                    <option value="">All Companies</option>
+                                    {companies.map(company => (
+                                        <option key={company} value={company}>{company}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {filteredInternships.length > 0 ? (
+                        <div className="internships-grid">
+                            {filteredInternships.map(internship => (
+                                <InternshipCard key={internship.id} internship={internship} showActions={true} />
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="empty-state">
+                            <div className="empty-icon">
+                                <i className="fas fa-search"></i>
+                            </div>
+                            <h3 className="empty-title">No internships found</h3>
+                            <p className="empty-description">
+                                Try adjusting your search criteria or check back later for new opportunities.
+                            </p>
+                            <div>
+                                <button className="btn btn-secondary" onClick={() => {
+                                    setSearchTerm('');
+                                    setSelectedLocation('');
+                                    setSelectedCompany('');
+                                }}>
+                                    <i className="fas fa-times"></i>
+                                    Clear Filters
+                                </button>
+                                <button className="btn btn-primary" onClick={() => loadInternships(true)}>
+                                    <i className="fas fa-refresh"></i>
+                                    Refresh
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+        
+        function ProfilePage() {
+            const [profile, setProfile] = useState({
+                name: currentUser?.displayName || '',
+                email: currentUser?.email || '',
+                bio: '',
+                skills: [],
+                location: '',
+                education: '',
+                experience: '',
+                githubUsername: '',
+                linkedinUrl: '',
+                portfolioUrl: ''
+            });
+            const [githubData, setGithubData] = useState(null);
+            const [githubLoading, setGithubLoading] = useState(false);
+            const [resumeUploading, setResumeUploading] = useState(false);
+            const [saving, setSaving] = useState(false);
+            
+            useEffect(() => {
+                // Load existing profile data
+                if (userData && userData.profile) {
+                    setProfile(prev => ({ ...prev, ...userData.profile }));
+                }
+            }, [userData]);
+            
+            const analyzeGitHub = async () => {
+                if (!profile.githubUsername.trim()) {
+                    showToast('Please enter a GitHub username.', 'warning');
+                    return;
+                }
+                
+                setGithubLoading(true);
+                try {
+                    const data = await apiService.analyzeGitHub(profile.githubUsername.trim());
+                    if (data) {
+                        setGithubData(data);
+                        
+                        // Extract skills from GitHub analysis
+                        if (data.analysis?.skills_from_code) {
+                            const newSkills = [...new Set([...profile.skills, ...data.analysis.skills_from_code])];
+                            setProfile(prev => ({ ...prev, skills: newSkills }));
+                        }
+                        
+                        showToast('GitHub profile analyzed successfully!', 'success');
+                    }
+                } catch (error) {
+                    console.error('GitHub analysis error:', error);
+                } finally {
+                    setGithubLoading(false);
+                }
+            };
+            
+            const handleResumeUpload = async (event) => {
+                const file = event.target.files[0];
+                if (!file) return;
+                
+                // Validate file type
+                const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'];
+                if (!validTypes.includes(file.type)) {
+                    showToast('Please upload a PDF, DOC, DOCX, or TXT file.', 'error');
+                    return;
+                }
+                
+                // Validate file size (10MB limit)
+                if (file.size > 10 * 1024 * 1024) {
+                    showToast('File size must be less than 10MB.', 'error');
+                    return;
+                }
+                
+                setResumeUploading(true);
+                try {
+                    const data = await apiService.parseResume(file);
+                    if (data) {
+                        // Update profile with extracted data
+                        const updatedProfile = { ...profile };
+                        
+                        if (data.skills && data.skills.length > 0) {
+                            updatedProfile.skills = [...new Set([...profile.skills, ...data.skills])];
+                        }
+                        
+                        if (data.experience) {
+                            updatedProfile.experience = data.experience;
+                        }
+                        
+                        if (data.education) {
+                            updatedProfile.education = data.education;
+                        }
+                        
+                        setProfile(updatedProfile);
+                        showToast('Resume parsed successfully! Skills and experience extracted.', 'success');
+                    }
+                } catch (error) {
+                    console.error('Resume parse error:', error);
+                } finally {
+                    setResumeUploading(false);
+                }
+            };
+            
+            const saveProfile = async () => {
+                setSaving(true);
+                try {
+                    // Update Firebase user profile
+                    if (currentUser && profile.name !== currentUser.displayName) {
+                        await currentUser.updateProfile({ displayName: profile.name });
+                    }
+                    
+                    // Save to database
+                    const userRef = db.ref(`users/${currentUser.uid}`);
+                    await userRef.update({
+                        profile: profile,
+                        updatedAt: firebase.database.ServerValue.TIMESTAMP
+                    });
+                    
+                    showToast('Profile saved successfully!', 'success');
+                } catch (error) {
+                    console.error('Save error:', error);
+                    showToast('Failed to save profile. Please try again.', 'error');
+                } finally {
+                    setSaving(false);
+                }
+            };
+            
+            return (
+                <div className="container content">
+                    <div className="page-header">
+                        <div>
+                            <h1 className="page-title">⚙️ Profile Settings</h1>
+                            <p className="page-subtitle">
+                                Manage your profile information to get better internship matches
+                            </p>
+                        </div>
+                        <div className="page-actions">
+                            <button 
+                                className="btn btn-primary"
+                                onClick={saveProfile}
+                                disabled={saving}
+                            >
+                                {saving ? (
+                                    <>
+                                        <i className="fas fa-spinner fa-spin"></i>
+                                        Saving...
+                                    </>
+                                ) : (
+                                    <>
+                                        <i className="fas fa-save"></i>
+                                        Save Changes
+                                    </>
+                                )}
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div className="profile-grid">
+                        <div className="profile-section">
+                            <div className="section-header">
+                                <div className="section-icon">
+                                    <i className="fas fa-user"></i>
+                                </div>
+                                <h3>Personal Information</h3>
+                            </div>
+                            
+                            <div className="form-group">
+                                <label className="form-label">Full Name</label>
+                                <input
+                                    type="text"
+                                    className="form-input"
+                                    value={profile.name}
+                                    onChange={(e) => setProfile({...profile, name: e.target.value})}
+                                    placeholder="Enter your full name"
+                                />
+                            </div>
+                            
+                            <div className="form-group">
+                                <label className="form-label">Email Address</label>
+                                <input
+                                    type="email"
+                                    className="form-input"
+                                    value={profile.email}
+                                    disabled
+                                    style={{opacity: 0.7}}
+                                />
+                                <small style={{color: 'var(--text-muted)', fontSize: '0.8rem'}}>
+                                    Email cannot be changed here. Use your account settings.
+                                </small>
+                            </div>
+                            
+                            <div className="form-group">
+                                <label className="form-label">Bio</label>
+                                <textarea
+                                    className="form-input form-textarea"
+                                    rows="4"
+                                    value={profile.bio}
+                                    onChange={(e) => setProfile({...profile, bio: e.target.value})}
+                                    placeholder="Tell us about yourself, your interests, and career goals..."
+                                />
+                            </div>
+                            
+                            <div className="form-group">
+                                <label className="form-label">Location</label>
+                                <input
+                                    type="text"
+                                    className="form-input"
+                                    value={profile.location}
+                                    onChange={(e) => setProfile({...profile, location: e.target.value})}
+                                    placeholder="City, State/Country"
+                                />
+                            </div>
+                            
+                            <div className="form-group">
+                                <label className="form-label">Skills (comma separated)</label>
+                                <textarea
+                                    className="form-input form-textarea"
+                                    rows="3"
+                                    value={profile.skills.join(', ')}
+                                    onChange={(e) => setProfile({
+                                        ...profile, 
+                                        skills: e.target.value.split(',').map(s => s.trim()).filter(s => s)
+                                    })}
+                                    placeholder="React, Python, JavaScript, Machine Learning, etc."
+                                />
+                            </div>
+                        </div>
+                        
+                        <div className="profile-section">
+                            <div className="section-header">
+                                <div className="section-icon">
+                                    <i className="fab fa-github"></i>
+                                </div>
+                                <h3>GitHub Integration</h3>
+                            </div>
+                            
+                            <div className="form-group">
+                                <label className="form-label">GitHub Username</label>
+                                <div style={{display: 'flex', gap: 'var(--space-sm)'}}>
+                                    <input
+                                        type="text"
+                                        className="form-input"
+                                        value={profile.githubUsername}
+                                        onChange={(e) => setProfile({...profile, githubUsername: e.target.value})}
+                                        placeholder="Enter GitHub username"
+                                        style={{flex: 1}}
+                                    />
+                                    <button 
+                                        className="btn btn-primary"
+                                        onClick={analyzeGitHub}
+                                        disabled={githubLoading}
+                                    >
+                                        {githubLoading ? (
+                                            <i className="fas fa-spinner fa-spin"></i>
+                                        ) : (
+                                            <i className="fas fa-search"></i>
+                                        )}
+                                        Analyze
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            {githubData && (
+                                <div className="github-profile">
+                                    <div className="github-header">
+                                        <img 
+                                            src={githubData.analysis?.profile_stats?.avatar_url} 
+                                            alt="GitHub Avatar"
+                                            className="github-avatar"
+                                        />
+                                        <div className="github-info">
+                                            <h4>{githubData.analysis?.profile_stats?.name || profile.githubUsername}</h4>
+                                            <p>@{profile.githubUsername}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="github-stats">
+                                        <div className="github-stat">
+                                            <div className="github-stat-value">
+                                                {githubData.analysis?.profile_stats?.public_repos || 0}
+                                            </div>
+                                            <div className="github-stat-label">Repositories</div>
+                                        </div>
+                                        <div className="github-stat">
+                                            <div className="github-stat-value">
+                                                {githubData.analysis?.profile_stats?.followers || 0}
+                                            </div>
+                                            <div className="github-stat-label">Followers</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="github-languages">
+                                        <h5>Languages</h5>
+                                        <div className="languages-list">
+                                            {Object.keys(githubData.analysis?.languages || {}).map(lang => (
+                                                <span key={lang} className="language-tag">{lang}</span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="github-skills">
+                                        <h5>Skills Detected</h5>
+                                        <div className="skills-detected">
+                                            {(githubData.analysis?.skills_from_code || []).map(skill => (
+                                                <span key={skill} className="skill-detected">{skill}</span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                            
+                            <div className="form-group">
+                                <label className="form-label">📄 Resume Upload</label>
+                                <div className="file-upload">
+                                    <input 
+                                        type="file" 
+                                        id="resume-upload"
+                                        accept=".pdf,.doc,.docx,.txt"
+                                        onChange={handleResumeUpload}
+                                        disabled={resumeUploading}
+                                    />
+                                    <label htmlFor="resume-upload" className="file-upload-label">
+                                        <div className="file-upload-icon">
+                                            {resumeUploading ? (
+                                                <i className="fas fa-spinner fa-spin"></i>
+                                            ) : (
+                                                <i className="fas fa-cloud-upload-alt"></i>
+                                            )}
+                                        </div>
+                                        <div>
+                                            <div className="file-upload-text">
+                                                {resumeUploading ? 'Parsing Resume...' : 'Upload Resume'}
+                                            </div>
+                                            <div className="file-upload-hint">
+                                                PDF, DOC, DOCX, or TXT (Max 10MB)
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+        
+        function AnalyticsPage() {
+            return (
+                <div className="container content">
+                    <div className="page-header">
+                        <div>
+                            <h1 className="page-title">📊 Analytics & Insights</h1>
+                            <p className="page-subtitle">
+                                Track your internship search progress and get AI-powered recommendations
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div className="empty-state">
+                        <div className="empty-icon">
+                            <i className="fas fa-chart-line"></i>
+                        </div>
+                        <h3 className="empty-title">Advanced Analytics Coming Soon</h3>
+                        <p className="empty-description">
+                            We're building comprehensive analytics to help you track your application success rate, 
+                            identify trending skills, and optimize your profile for better matches. Stay tuned!
+                        </p>
+                        <div>
+                            <button className="btn btn-secondary" onClick={() => setPage('profile')}>
+                                <i className="fas fa-user-cog"></i>
+                                Optimize Profile
+                            </button>
+                            <button className="btn btn-primary" onClick={() => setPage('internships')}>
+                                <i className="fas fa-search"></i>
+                                Find Internships
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+        
+        function InternshipCard({ internship, showActions = false }) {
+            const [applied, setApplied] = useState(false);
+            
+            const handleApply = () => {
+                if (!applied) {
+                    setApplied(true);
+                    showToast(`Successfully applied to ${internship.title} at ${internship.company}!`, 'success');
+                } else {
+                    showToast('You have already applied to this internship.', 'info');
+                }
+            };
+            
+            const handleViewDetails = () => {
+                if (internship.url) {
+                    window.open(internship.url, '_blank', 'noopener,noreferrer');
+                } else {
+                    showToast('Detailed view coming soon!', 'info');
+                }
+            };
+            
+            const handleSaveForLater = () => {
+                showToast(`Saved ${internship.title} to your favorites!`, 'success');
+            };
+            
+            // Calculate match score angle for circular progress
+            const matchScore = internship.match_score || 85;
+            const scoreAngle = (matchScore / 100) * 360;
+            
+            return (
+                <div className="internship-card" style={{'--score-angle': `${scoreAngle}deg`}}>
+                    <div className="internship-header">
+                        <div className="company-logo">
+                            {internship.company.charAt(0).toUpperCase()}
+                        </div>
+                        <div className="internship-info">
+                            <h3 className="internship-title">{internship.title}</h3>
+                            <div className="internship-company">
+                                {internship.company} • {internship.location}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div className="internship-meta">
+                        <div className="meta-item">
+                            <i className="fas fa-clock"></i>
+                            <span>{internship.duration || 'Not specified'}</span>
+                        </div>
+                        <div className="meta-item">
+                            <i className="fas fa-rupee-sign"></i>
+                            <span>{internship.salary || 'Not disclosed'}</span>
+                        </div>
+                        <div className="meta-item">
+                            <i className="fas fa-briefcase"></i>
+                            <span>{internship.type || 'Internship'}</span>
+                        </div>
+                        <div className="meta-item">
+                            <i className="fas fa-calendar"></i>
+                            <span>{new Date(internship.posted_date).toLocaleDateString()}</span>
+                        </div>
+                    </div>
+                    
+                    <div className="internship-description">
+                        {internship.description}
+                    </div>
+                    
+                    <div className="skills-section">
+                        <div className="skills-list">
+                            {internship.skills && internship.skills.slice(0, 8).map((skill, index) => (
+                                <span key={index} className="skill-tag">{skill}</span>
+                            ))}
+                            {internship.skills && internship.skills.length > 8 && (
+                                <span className="skill-tag" style={{background: 'var(--glass)'}}>
+                                    +{internship.skills.length - 8} more
+                                </span>
+                            )}
+                        </div>
+                    </div>
+                    
+                    <div className="internship-footer">
+                        <div className="match-score">
+                            <div className="score-circle">
+                                <div className="score-value">{matchScore}%</div>
+                            </div>
+                            <div className="score-label">Match</div>
+                        </div>
+                        
+                        <div style={{display: 'flex', gap: 'var(--space-sm)'}}>
+                            {showActions && (
+                                <>
+                                    <button 
+                                        className="btn btn-ghost btn-sm" 
+                                        onClick={handleSaveForLater}
+                                        title="Save for later"
+                                    >
+                                        <i className="fas fa-heart"></i>
+                                    </button>
+                                    <button 
+                                        className="btn btn-secondary btn-sm" 
+                                        onClick={handleViewDetails}
+                                        title="View details"
+                                    >
+                                        <i className="fas fa-external-link-alt"></i>
+                                    </button>
+                                </>
+                            )}
+                            <button 
+                                className={`btn ${applied ? 'btn-success' : 'btn-primary'} btn-sm`}
+                                onClick={handleApply}
+                                disabled={applied}
+                            >
+                                <i className={`fas fa-${applied ? 'check' : 'paper-plane'}`}></i>
+                                {applied ? 'Applied' : 'Apply Now'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+        
+        // Main App Component and Renderer
+        function App() {
+            return (
+                <div>
+                    {(() => {
+                        switch(currentPage) {
+                            case 'dashboard':
+                                return <Dashboard />;
+                            case 'internships':
+                                return <InternshipsPage />;
+                            case 'profile':
+                                return <ProfilePage />;
+                            case 'analytics':
+                                return <AnalyticsPage />;
+                            default:
+                                return <WelcomePage />;
+                        }
+                    })()}
+                </div>
+            );
+        }
+        
+        function renderApp() {
+            ReactDOM.render(<App />, document.getElementById('app'));
+        }
+        
+        // Initialize App
+        renderApp();
+        
+        // Global utility functions
+        window.showToast = showToast;
+        window.setPage = setPage;
+        window.toggleTheme = toggleTheme;
+        window.showAuthModal = showAuthModal;
+        window.closeAuthModal = closeAuthModal;
+        window.toggleDropdown = toggleDropdown;
+        window.logout = logout;
+        window.signInWithGoogle = signInWithGoogle;
+        window.signInWithGitHub = signInWithGitHub;
+        window.showSettings = showSettings;
+        window.showHelp = showHelp;
+        window.removeToast = removeToast;
+        window.navigateToPage = navigateToPage;
+        
+        console.log('🚀 InternAI loaded successfully!');
+        console.log('Current theme:', currentTheme);
+        console.log('API Base:', API_BASE);
+    </script>
+</body>
+</html>
